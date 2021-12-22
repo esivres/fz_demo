@@ -1,5 +1,7 @@
 import {Route, Routes} from "react-router-dom";
-import {EmployeeSearchCard} from "./employee/EmployeeCard";
+
+import EmployeeSearchCard from "./employee/EmployeeCard";
+import OrderCard from "./order/OrderCard";
 import Search from './Search.js'
 
 function Header() {
@@ -51,12 +53,30 @@ function Header() {
 function PageSelector() {
     return (
             <Routes>
-                <Route path="/orders" element={<Search type='orders' selectors={[{name:'Ожидают',key:'work'},{name:'Просроченные',key:'alert'},{name:'Исполненно',key:'complete'}]} />}/>
-                <Route path="/outfit" element={<Search type='outfit'/>}/>
-                <Route path="/catalog/vehicle" element={<Search type='vehicle'/>}/>
-                <Route path="/catalog/employee" element={<Search type='employee' card={EmployeeSearchCard} />}/>
-                <Route path="/catalog/customer" element={<Search type='customer'/>}/>
-                <Route path="/catalog/location" element={<Search type='location'/>}/>
+                <Route path="/orders" element={
+                    <Search type='orders' selectors={[
+                        {name:'Ожидают',key:'work'},
+                        {name:'Просроченные',key:'alert'},
+                        {name:'Исполненно',key:'complete'}
+                    ]} 
+                    card={OrderCard}
+                    />
+                } />
+                <Route path="/outfit" element={
+                    <Search type='outfit'/>
+                } />
+                <Route path="/catalog/vehicle" element={
+                    <Search type='vehicle'/>
+                } />
+                <Route path="/catalog/employee" element={
+                    <Search type='employees' card={EmployeeSearchCard} />
+                } />
+                <Route path="/catalog/customer" element={
+                    <Search type='customer'/>
+                } />
+                <Route path="/catalog/location" element={
+                    <Search type='location'/>
+                } />
             </Routes>
         )
 
