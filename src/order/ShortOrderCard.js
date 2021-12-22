@@ -1,4 +1,4 @@
 
 export function ShortOrderCard({card}){
-    
+
 }
