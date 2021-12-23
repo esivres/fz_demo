@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-const Select = ({ label, value: text = '', options = [], ...other }) => {
-  const [value, setValue] = useState(text);
+const Select = ({ label, options = [], ...other }) => {
   return (
     <div className="uk-margin">
       {label && <label className="uk-form-label" htmlFor="form-stacked-select">{label}</label>}
@@ -9,8 +8,6 @@ const Select = ({ label, value: text = '', options = [], ...other }) => {
         <select 
           className="uk-select"
           id="form-stacked-select"
-          onChange={(e) => setValue(e.target.value)}
-          value={value}
           {...other}
         >
           {options.map(el => <option key={el.id || el} value={el.id || el}>{el.title || el}</option>)}

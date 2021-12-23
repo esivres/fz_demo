@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-const Input = ({ label, value: text = '', ...other }) => {
-  const [value, setValue] = useState(text);
+const Input = ({ label, ...other }) => {
   return (
     <div className="uk-margin">
       {label && <label className="uk-form-label" htmlFor="form-stacked-text">{label}</label>}
@@ -11,8 +10,6 @@ const Input = ({ label, value: text = '', ...other }) => {
           className="uk-input"
           type="text"
           placeholder="Some text..."
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
           {...other} 
         />
       </div>
