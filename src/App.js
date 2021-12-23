@@ -1,6 +1,9 @@
+import React from 'react'
+import ReactDOM from 'react-dom'
 import {Route, Routes} from "react-router-dom";
-import {EmployeeSearchCard} from "./employee/EmployeeCard";
+import {EmployeeSearchCard} from "./search/EmployeeCard";
 import Search from './Search.js'
+import {LocationCard} from "./search/LocationCard";
 
 function Header() {
     return (
@@ -45,20 +48,26 @@ function Header() {
             </div>
 
         </nav>
-        )
+    )
 }
 
 function PageSelector() {
     return (
-            <Routes>
-                <Route path="/orders" element={<Search type='orders' selectors={[{name:'Ожидают',key:'work'},{name:'Просроченные',key:'alert'},{name:'Исполненно',key:'complete'}]} />}/>
-                <Route path="/outfit" element={<Search type='outfit'/>}/>
-                <Route path="/catalog/vehicle" element={<Search type='vehicle'/>}/>
-                <Route path="/catalog/employee" element={<Search type='employee' card={EmployeeSearchCard} />}/>
-                <Route path="/catalog/customer" element={<Search type='customer'/>}/>
-                <Route path="/catalog/location" element={<Search type='location'/>}/>
-            </Routes>
-        )
+        <Routes>
+            <Route path="/orders" element={<Search type='orders' selectors={[{name: 'Ожидают', key: 'work'}, {
+                name: 'Просроченные',
+                key: 'alert'
+            }, {name: 'Исполненно', key: 'complete'}]}/>}/>
+            <Route path="/outfit" element={<Search type='outfit'/>}/>
+            <Route path="/catalog/vehicle" element={<Search type='vehicle'/>}/>
+            <Route path="/catalog/employee" element={<Search type='employee' card={EmployeeSearchCard}/>}/>
+            <Route path="/catalog/customer" element={<Search type='customer'/>}/>
+            <Route path="/catalog/location" element={<Search type='location' selectors={[
+                {name: 'Ожидание', key: 'IDLE'},
+                {name: 'Обслуживание',key: 'SERVICE'},
+                {name: 'Доставка', key: 'DELIVERY'}]} card={LocationCard}/>}/>
+        </Routes>
+    )
 
 }
 

@@ -1,3 +1,5 @@
+import React from 'react'
+import ReactDOM from 'react-dom'
 import {useSearchParams} from 'react-router-dom'
 import {useEffect, useState} from 'react'
 
