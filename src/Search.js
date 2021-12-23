@@ -63,7 +63,6 @@ function Search(props) {
         setLoading(true);
         fetch(`/api/${props.type}/?${params.toString()}`)
             .then(response => {
-                console.log(777, `/api/${props.type}/?${params.toString()}`);
                 if (response.status == 200) {
                     return response.json();
                 } else {
@@ -72,7 +71,7 @@ function Search(props) {
                 }
             }).then(jData=>{
                 let viewData = [];
-                jData.map(item=>(<Children key={<item className="id"></item>} {...item}/>)).forEach((item)=>viewData.push(item))
+                jData.map(item=>(<Children key={item.id} {...item}/>)).forEach((item)=>viewData.push(item))
                 setData(viewData)
             })
     }
