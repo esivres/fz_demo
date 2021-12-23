@@ -11,7 +11,7 @@ function Search(props) {
   const [sSelectors, setSSelectors] = useState(searchParams.getAll("selector") || [])
   const [sortFlag, setSortFlag] = useState(searchParams.getAll("order") || [])
   const [data, setData] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const selectors = []
 
   function toggleSelector(selector) {
@@ -49,6 +49,8 @@ function Search(props) {
   }
 
   function loadData() {
+    setIsLoading(true);
+
     const params = new URLSearchParams();
     params.append("skip", data.length)
     if (searchQuery != null) {
@@ -60,19 +62,20 @@ function Search(props) {
     if (sSelectors != null && sSelectors.length > 0) {
       params.append("selectors", sSelectors)
     }
-    setLoading(true);
+    
     fetch(`/api/${props.type}/?${params.toString()}`)
       .then(response => {
         if (response.status == 200) {
           return response.json();
         } else {
-          setLoading(false)
+          setIsLoading(false)
           throw "can`t call"
         }
       }).then(jData=>{
         let viewData = [];
         jData.map(item=>(<Children key={item.id} {...item}/>)).forEach((item)=>viewData.push(item))
-        setData(viewData)
+        setData(viewData);
+        setIsLoading(false);
       })
   }
 
@@ -119,9 +122,17 @@ function Search(props) {
             </span>
           </div>
         </div>
-        <ul className={`uk-child-width-1-${( props.countGrid - 1) || 2 } uk-child-width-1-${ props.countGrid || 3 }@m uk-text-center`} data-uk-grid>
-          {data}
-        </ul>
+        {isLoading && (
+          <div className="uk-flex uk-flex-center uk-margin-medium-top uk-margin-medium-bottom">
+            <span uk-spinner="ratio: 4.5" />
+          </div>
+        )}
+        {!isLoading && data && (
+          <ul className={`uk-child-width-1-${( props.countGrid - 1) || 2 } uk-child-width-1-${ props.countGrid || 3 }@m uk-text-center`} data-uk-grid>
+            {data}
+          </ul>
+        )}
+        
       </div>
     </div>
   )

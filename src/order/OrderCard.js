@@ -1,6 +1,12 @@
 import React from 'react';
 import Input from './Input';
 
+const ORDER_STATUS = {
+  'WORK': 'Ожидают',
+  'ALERT': 'Просроченные',
+  'COMPLETE': 'Исполненно',
+};
+
 const OrderCard = ({ 
   id,
 
@@ -18,6 +24,7 @@ const OrderCard = ({
 
   count, 
   deliveryDate,
+  type,
 }) => {
   return (
     <div className="uk-card uk-card-hover uk-card-body uk-text-left">
@@ -45,6 +52,7 @@ const OrderCard = ({
           <legend class="uk-legend">Информация о грузе</legend>
           <Input label="Количество груза" value={count} disabled />
           <Input label="Дата доставки" value={deliveryDate} disabled />
+          <Input label="Статус" value={ORDER_STATUS[type] || ''} disabled />
         </fieldset>
       </form>
       
