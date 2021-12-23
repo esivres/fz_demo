@@ -70,7 +70,7 @@ function PageSelector() {
                     <Search type='vehicle'/>
                 } />
                 <Route path="/catalog/employee" element={
-                    <Search type='employees' card={EmployeeSearchCard} />
+                    <Search type='employee' card={EmployeeSearchCard} />
                 } />
                 <Route path="/catalog/customer" element={
                     <Search type='customer'/>
