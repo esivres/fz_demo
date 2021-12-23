@@ -2,6 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {useSearchParams} from 'react-router-dom'
 import {useEffect, useState} from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { setCompany } from './store'
 
 function Search(props) {
 
@@ -81,7 +83,20 @@ function Search(props) {
 
   useEffect(() => {
     loadData()
-  }, [searchParams])
+  }, [searchParams]);
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    fetch('/api/company').then(response => {
+        if (response.status == 200) {
+          return response.json();
+        } else {
+          throw "can`t call"
+        }
+      }).then(data=>{
+        dispatch(setCompany(data.companies))
+      })
+  }, [searchParams]);
 
   return (
     <div className="uk-container">

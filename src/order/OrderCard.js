@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
+import { useSelector } from 'react-redux'
 
 import Form from './Form';
 
@@ -23,26 +24,28 @@ const ORDER_STATUS = {
 const OrderCard = (props) => {
 
   let subtitle;
-    const [modalIsOpen, setIsOpen] = React.useState(false);
+  const [modalIsOpen, setIsOpen] = React.useState(false);
 
-    function openModal() {
-      setIsOpen(true);
-    }
+  function openModal() {
+    setIsOpen(true);
+  }
 
-    function afterOpenModal() {
-      // references are now sync'd and can be accessed.
-      subtitle.style.color = '#f00';
-    }
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+    subtitle.style.color = '#f00';
+  }
 
-    function closeModal() {
-      setIsOpen(false);
-    }
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  const company = useSelector(({ company: { list }}) => list);
 
   return (
     <div className="uk-card uk-card-hover uk-card-body uk-text-left">
-      <Form {...props} onSubmit={(e) => e.preventDefault()} isDisabled>
+      <Form {...props} company={company} onSubmit={(e) => e.preventDefault()} isDisabled>
         <button 
-          class="uk-button uk-button-default"
+          className="uk-button uk-button-default"
           onClick={openModal}
         >Редактировать</button>
       </Form>
@@ -54,13 +57,13 @@ const OrderCard = (props) => {
         style={customStyles}
         contentLabel="Example Modal"
       >
-        <Form {...props}>
-          <div class="uk-flex uk-flex-between">
+        <Form company={company} isEdit {...props}>
+          <div className="uk-flex uk-flex-between">
             <button 
-              class="uk-button uk-button-primary"
+              className="uk-button uk-button-primary"
             >Сохранить</button>
             <button 
-              class="uk-button uk-button-danger"
+              className="uk-button uk-button-danger"
             >Отменить</button>
           </div>
         </Form>

@@ -1,11 +1,15 @@
-import {Model, Server} from "miragejs";
-
-import {employee, location, order} from "./factories"
+import faker from "faker"
+import {Model, Server, hasMany, belongsTo} from "miragejs";
+import {employee, location, order, company} from "./factories"
 
 export const makeServer = ({environment = "development"} = {}) => new Server({
     environment,
     models: {
-        order: Model,
+        company: Model,
+        order: Model.extend({
+          sender: belongsTo('company'),
+          recipient: belongsTo('company'),
+        }),
         outfit: Model,
         vehicle: Model,
         employee: Model,
@@ -14,9 +18,16 @@ export const makeServer = ({environment = "development"} = {}) => new Server({
 
     },
     seeds(server) {
-        server.createList('location', 100)
+        const company = server.createList('company', 20);
+
+        server.createList('location', 100);
         server.createList('employee', 50);
-        server.createList('order', 50);
+        server.createList('order', 50).forEach(order => {
+            order.update({
+              sender: company[faker.datatype.number({min: 0 , max: 9})],
+              recipient: company[faker.datatype.number({min: 10 , max: 19})],
+            })
+        });
         server.create('employee', {
             dob: "17.09.2021",
             documentDate: "29.10.2021",
@@ -39,6 +50,7 @@ export const makeServer = ({environment = "development"} = {}) => new Server({
         });
     },
     factories: {
+        company,
         employee,
         order,
         location,
@@ -46,6 +58,8 @@ export const makeServer = ({environment = "development"} = {}) => new Server({
     routes() {
         this.namespace = "api";
         this.timing = 750;
+
+        this.get("/company", (schema, request) => schema.companies.all());
 
         this.get("/:type", (schema, request) => {
             let modelName = request.params.type + 's';

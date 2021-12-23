@@ -12,6 +12,11 @@ const compamyName = () => faker.company.companyName();
 const phone = () => fakerRu.phone.phoneNumber();
 const email = () => faker.internet.email();
 
+export const company = Factory.extend({
+  name: compamyName,
+  address: address,
+});
+
 export const employee = Factory.extend({
   id: (i) => i,
   fio,
@@ -33,14 +38,10 @@ export const employee = Factory.extend({
 });
 
 export const order = Factory.extend({
-  companyNameSender: compamyName,
-  comapnyAddressSender: address,
   fioSender: fio,
   phoneNumberSender: phone,
   emailSender: email,
 
-  companyNameRecipient: compamyName,
-  comapnyAddressRecipient: address,
   fioRecipient: fio,
   phoneNumberRecipient: phone,
   emailRecipient: email,
