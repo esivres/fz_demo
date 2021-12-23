@@ -1,6 +1,6 @@
-import {Server, Model, Factory, belongsTo} from "miragejs";
+import {Model, Server} from "miragejs";
 
-import {employee, order,location} from "./factories"
+import {employee, location, order} from "./factories"
 
 export const makeServer = ({environment = "development"} = {}) => new Server({
     environment,
@@ -35,7 +35,7 @@ export const makeServer = ({environment = "development"} = {}) => new Server({
             let order = request.queryParams.order;
             return schema[modelName].all().filter(item => {
                 let tr = true
-                if (searchString != '') {
+                if (searchString !== '') {
                     tr = item.searchString.indexOf(searchString) > 0
                 }
                 if (tr && selectors.length > 0) {

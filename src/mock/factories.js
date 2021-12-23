@@ -1,4 +1,4 @@
-import { Factory, belongsTo } from "miragejs";
+import {belongsTo, Factory} from "miragejs";
 import faker from "faker"
 
 const ROLES = ['CLIENT_MANAGER', 'SERVICE_MANAGER', 'TOP_MANAGER', 'ADMINISTRATOR'];
