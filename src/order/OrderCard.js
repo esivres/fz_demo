@@ -1,5 +1,7 @@
 import React from 'react';
+import { format } from 'date-fns'
 import Input from './Input';
+import Select from './Select';
 
 const ORDER_STATUS = {
   'WORK': 'Ожидают',
@@ -26,6 +28,8 @@ const OrderCard = ({
   deliveryDate,
   type,
 }) => {
+  const date = format(new Date(deliveryDate), 'MM/dd/yyyy');
+
   return (
     <div className="uk-card uk-card-hover uk-card-body uk-text-left">
       <h2 className="uk-heading-bullet">Заказ #{id}</h2>
@@ -51,8 +55,9 @@ const OrderCard = ({
         <fieldset className="uk-fieldset">
           <legend className="uk-legend">Информация о грузе</legend>
           <Input label="Количество груза" value={count} disabled />
-          <Input label="Дата доставки" value={deliveryDate} disabled />
+          <Input label="Дата доставки" value={date} disabled />
           <Input label="Статус" value={ORDER_STATUS[type] || ''} disabled />
+          <Select label="Статус" options={Object.values(ORDER_STATUS)} value={ORDER_STATUS[type]} disabled />
         </fieldset>
       </form>
       
