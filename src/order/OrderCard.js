@@ -1,7 +1,18 @@
 import React from 'react';
-import { format } from 'date-fns'
-import Input from './Input';
-import Select from './Select';
+import Modal from 'react-modal';
+
+import Form from './Form';
+
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
 
 const ORDER_STATUS = {
   'WORK': 'Ожидают',
@@ -9,58 +20,52 @@ const ORDER_STATUS = {
   'COMPLETE': 'Исполненно',
 };
 
-const OrderCard = ({ 
-  id,
+const OrderCard = (props) => {
 
-  companyNameSender,
-  comapnyAddressSender,
-  fioSender,
-  phoneNumberSender,
-  emailSender,
+  let subtitle;
+    const [modalIsOpen, setIsOpen] = React.useState(false);
 
-  companyNameRecipient,
-  comapnyAddressRecipient,
-  fioRecipient,
-  phoneNumberRecipient,
-  emailRecipient,
+    function openModal() {
+      setIsOpen(true);
+    }
 
-  count, 
-  deliveryDate,
-  type,
-}) => {
-  const date = format(new Date(deliveryDate), 'MM/dd/yyyy');
+    function afterOpenModal() {
+      // references are now sync'd and can be accessed.
+      subtitle.style.color = '#f00';
+    }
+
+    function closeModal() {
+      setIsOpen(false);
+    }
 
   return (
     <div className="uk-card uk-card-hover uk-card-body uk-text-left">
-      <h2 className="uk-heading-bullet">Заказ #{id}</h2>
-      <form>
-        <div className="uk-flex uk-flex-between">
-          <fieldset className="uk-fieldset uk-width-1-2">
-            <legend className="uk-legend">Отправитель</legend>
-            <Input label="Наименование Компании" value={companyNameSender} disabled />
-            <Input label="Адресс" value={comapnyAddressSender} disabled />
-            <Input label="Фамилия, имя, отчество" value={fioSender} disabled />
-            <Input label="Номер телефона" value={phoneNumberSender} disabled />
-            <Input label="Адрес электронной почты" value={emailSender} disabled />
-          </fieldset>
-          <fieldset className="uk-fieldset uk-width-1-2 uk-margin-medium-left">
-            <legend className="uk-legend">Получатель</legend>
-            <Input label="Наименование Компании" value={companyNameRecipient} disabled />
-            <Input label="Адресс" value={comapnyAddressRecipient} disabled />
-            <Input label="Фамилия, имя, отчество" value={fioRecipient} disabled />
-            <Input label="Номер телефона" value={phoneNumberRecipient} disabled />
-            <Input label="Адрес электронной почты" value={emailRecipient} disabled />
-          </fieldset>
-        </div>
-        <fieldset className="uk-fieldset">
-          <legend className="uk-legend">Информация о грузе</legend>
-          <Input label="Количество груза" value={count} disabled />
-          <Input label="Дата доставки" value={date} disabled />
-          <Input label="Статус" value={ORDER_STATUS[type] || ''} disabled />
-          <Select label="Статус" options={Object.values(ORDER_STATUS)} value={ORDER_STATUS[type]} disabled />
-        </fieldset>
-      </form>
-      
+      <Form {...props} onSubmit={(e) => e.preventDefault()} isDisabled>
+        <button 
+          class="uk-button uk-button-default"
+          onClick={openModal}
+        >Редактировать</button>
+      </Form>
+
+      <Modal
+        isOpen={modalIsOpen}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <Form {...props}>
+          <div class="uk-flex uk-flex-between">
+            <button 
+              class="uk-button uk-button-primary"
+            >Сохранить</button>
+            <button 
+              class="uk-button uk-button-danger"
+            >Отменить</button>
+          </div>
+        </Form>
+      </Modal>
+
     </div>
   )
 }
