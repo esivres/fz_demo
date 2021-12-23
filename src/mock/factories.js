@@ -1,13 +1,19 @@
 import {belongsTo, Factory} from "miragejs";
 import faker from "faker"
+import fakerRu from "faker/locale/ru"
 
 const ROLES = ['CLIENT_MANAGER', 'SERVICE_MANAGER', 'TOP_MANAGER', 'ADMINISTRATOR'];
 const LOCATION_TYPE = ['IDLE', 'SERVICE', 'DELIVERY']
 
+const fio = () => faker.name.firstName() + " " + faker.name.lastName();
+const address = () => `${faker.address.city()}, ${faker.address.streetAddress()}`;
+const compamyName = () => faker.company.companyName();
+const phone = () => fakerRu.phone.phoneNumber();
+const email = () => faker.internet.email();
 
 export const employee = Factory.extend({
   id: (i) => i,
-  fio: (i) => faker.name.firstName() + " " + faker.name.lastName(),
+  fio,
   dob: (i) => faker.date.past().toLocaleDateString(),
   position: (i) => ROLES[i % ROLES.length],
   location: belongsTo("location"),
@@ -26,9 +32,20 @@ export const employee = Factory.extend({
 });
 
 export const order = Factory.extend({
-  fio: (i) => faker.name.firstName() + " " + faker.name.lastName(),
-  dob: (i) => faker.date.past().toLocaleDateString(),
-  position: (i) => ROLES[i % ROLES.length],
+  companyNameSender: compamyName,
+  comapnyAddressSender: address,
+  fioSender: fio,
+  phoneNumberSender: phone,
+  emailSender: email,
+
+  companyNameRecipient: compamyName,
+  comapnyAddressRecipient: address,
+  fioRecipient: fio,
+  phoneNumberRecipient: phone,
+  emailRecipient: email,
+
+  deliveryDate: () => faker.date.future(),
+  count: () => faker.datatype.number({ min: 1 , max: 10000 }),
 });
 
 export const location = Factory.extend({
