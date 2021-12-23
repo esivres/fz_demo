@@ -62,7 +62,7 @@ function Search(props) {
     if (sSelectors != null && sSelectors.length > 0) {
       params.append("selectors", sSelectors)
     }
-    
+
     fetch(`/api/${props.type}/?${params.toString()}`)
       .then(response => {
         if (response.status == 200) {
@@ -132,7 +132,7 @@ function Search(props) {
             {data}
           </ul>
         )}
-        
+
       </div>
     </div>
   )
