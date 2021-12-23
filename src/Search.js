@@ -63,6 +63,7 @@ function Search(props) {
         setLoading(true);
         fetch(`/api/${props.type}/?${params.toString()}`)
             .then(response => {
+                console.log(777, `/api/${props.type}/?${params.toString()}`);
                 if (response.status == 200) {
                     return response.json();
                 } else {

@@ -48,26 +48,39 @@ function Header() {
             </div>
 
         </nav>
-    )
+        )
 }
 
 function PageSelector() {
     return (
-        <Routes>
-            <Route path="/orders" element={<Search type='orders' selectors={[{name: 'Ожидают', key: 'work'}, {
-                name: 'Просроченные',
-                key: 'alert'
-            }, {name: 'Исполненно', key: 'complete'}]}/>}/>
-            <Route path="/outfit" element={<Search type='outfit'/>}/>
-            <Route path="/catalog/vehicle" element={<Search type='vehicle'/>}/>
-            <Route path="/catalog/employee" element={<Search type='employee' card={EmployeeSearchCard}/>}/>
-            <Route path="/catalog/customer" element={<Search type='customer'/>}/>
-            <Route path="/catalog/location" element={<Search type='location' selectors={[
-                {name: 'Ожидание', key: 'IDLE'},
-                {name: 'Обслуживание',key: 'SERVICE'},
-                {name: 'Доставка', key: 'DELIVERY'}]} card={LocationCard}/>}/>
-        </Routes>
-    )
+            <Routes>
+                <Route path="/orders" element={
+                    <Search type='orders' selectors={[
+                        {name:'Ожидают',key:'work'},
+                        {name:'Просроченные',key:'alert'},
+                        {name:'Исполненно',key:'complete'}
+                    ]}
+                    card={OrderCard}
+                    />
+                } />
+                <Route path="/outfit" element={
+                    <Search type='outfit'/>
+                } />
+                <Route path="/catalog/vehicle" element={
+                    <Search type='vehicle'/>
+                } />
+                <Route path="/catalog/employee" element={
+                    <Search type='employees' card={EmployeeSearchCard} />
+                } />
+                <Route path="/catalog/customer" element={
+                    <Search type='customer'/>
+                } />
+                <Route path="/catalog/location" element={<Search type='location' selectors={[
+                    {name: 'Ожидание', key: 'IDLE'},
+                    {name: 'Обслуживание',key: 'SERVICE'},
+                    {name: 'Доставка', key: 'DELIVERY'}]} card={LocationCard}/>}/>
+            </Routes>
+        )
 
 }
 
