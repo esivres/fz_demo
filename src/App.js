@@ -61,6 +61,7 @@ function PageSelector() {
                         {name:'Исполненно',key:'complete'}
                     ]}
                     card={OrderCard}
+                    countGrid={2}
                     />
                 } />
                 <Route path="/outfit" element={

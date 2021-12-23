@@ -119,7 +119,7 @@ function Search(props) {
             </span>
           </div>
         </div>
-        <ul className="uk-child-width-1-2 uk-child-width-1-3@m uk-text-center" data-uk-grid>
+        <ul className={`uk-child-width-1-${(props.countGrid - 1) || 2} uk-child-width-1-${props.countGrid || 3}@m uk-text-center`} data-uk-grid>
           {data}
         </ul>
       </div>
