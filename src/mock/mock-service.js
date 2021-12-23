@@ -36,7 +36,7 @@ export const makeServer = ({environment = "development"} = {}) => new Server({
             return schema[modelName].all().filter(item => {
                 let tr = true
                 if (searchString !== '') {
-                    tr = item.searchString.indexOf(searchString) > 0
+                    tr = (item.searchString||'').toUpperCase().indexOf(searchString.toUpperCase()) > -1
                 }
                 if (tr && selectors.length > 0) {
                     tr = selectors.indexOf(item.searchStatus) > -1
@@ -46,22 +46,24 @@ export const makeServer = ({environment = "development"} = {}) => new Server({
         });
 
         this.patch("/:type/:id", (schema, request) => {
-            let attrs = JSON.parse(request.requestBody).todo;
+            let modelName = request.params.type + 's';
+            let attrs = JSON.parse(request.requestBody);
 
-            return schema[request.params.type].todos.find(request.params.id).update(attrs);
+            return schema[modelName].todos.find(request.params.id).update(attrs);
         });
 
         this.post(
             "/:type",
             (schema, request) => {
-                let attrs = JSON.parse(request.requestBody).todo;
-
-                return schema[request.params.type].create(attrs);
+                let modelName = request.params.type + 's';
+                let attrs = JSON.parse(request.requestBody);
+                return schema[modelName].create(attrs)[request.params.type];
             },
             {timing: 2000}
         );
         this.delete("/:type/:id", (schema, request) => {
-            return schema[request.params.type].find(request.params.id).destroy();
+            let modelName = request.params.type + 's';
+            return schema[modelName].find(request.params.id).destroy();
         });
     }
 });
