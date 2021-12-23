@@ -72,7 +72,7 @@ function Search(props) {
                 }
             }).then(jData=>{
                 let viewData = [];
-                jData.map(item=>(<Children {...item}/>)).forEach((item)=>viewData.push(item))
+                jData.map(item=>(<Children key={<item className="id"></item>} {...item}/>)).forEach((item)=>viewData.push(item))
                 setData(viewData)
             })
     }
