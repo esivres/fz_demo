@@ -55,12 +55,14 @@ function PageSelector() {
     return (
             <Routes>
                 <Route path="/orders" element={
-                    <Search type='orders' selectors={[
+                    <Search type='order' selectors={[
                         {name:'Ожидают',key:'work'},
                         {name:'Просроченные',key:'alert'},
                         {name:'Исполненно',key:'complete'}
                     ]}
+                    selectorName="type"
                     card={OrderCard}
+                    countGrid={2}
                     />
                 } />
                 <Route path="/outfit" element={

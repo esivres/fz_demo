@@ -52,16 +52,39 @@ export const makeServer = ({environment = "development"} = {}) => new Server({
             let searchString = request.queryParams.s;
             let sel = request.queryParams.selectors;
             let selectors = (sel != null && sel.split(',')) || [];
-            let order = request.queryParams.order;
+            let sorting = request.queryParams.order;
             return schema[modelName].all().filter(item => {
                 let tr = true
                 if (searchString !== '') {
                     tr = (item.searchString || '').toUpperCase().indexOf(searchString.toUpperCase()) > -1
                 }
-                if (tr && selectors.length > 0) {
-                    tr = selectors.indexOf(item.searchStatus) > -1
+
+                if(!tr) return false;
+                
+                if (tr && selectors.length && item.selectors) {
+                  tr = selectors.indexOf(item.selectors) > -1;
                 }
+
+                if(!tr) return false;
+
                 return tr;
+            }).sort((item1, item2) => {
+              if(sorting !== 'ask' && sorting !== 'desc') {
+                return 0;
+              }
+              if(item1.sorting === undefined || item2.sorting === undefined) return 0;
+
+              const left = sorting === 'ask' ? -1 : 1;
+              const right = sorting === 'ask' ? 1 : -1;
+
+              let a = item1.sorting;
+              let b = item2.sorting;
+              if (typeof a === 'string') {
+                a = a.toLowerCase();
+                b = b.toLowerCase();
+              }
+
+              return a === b ? 0 : (a < b ? left : right); 
             }).models
         });
 
