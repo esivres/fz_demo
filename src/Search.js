@@ -51,19 +51,19 @@ function Search(props) {
     function loadData() {
         const params = new URLSearchParams();
         params.append("skip", data.length)
-        if (searchQuery != null) {
+        if (searchQuery !== null) {
             params.append("s", searchQuery)
         }
-        if (sortFlag != null) {
+        if (sortFlag !== null) {
             params.append("order", sortFlag)
         }
-        if (sSelectors != null && sSelectors.length > 0) {
+        if (sSelectors !== null && sSelectors.length > 0) {
             params.append("selectors", sSelectors)
         }
         setLoading(true);
         fetch(`/api/${props.type}/?${params.toString()}`)
             .then(response => {
-                if (response.status == 200) {
+                if (response.status === 200) {
                     return response.json();
                 } else {
                     setLoading(false)

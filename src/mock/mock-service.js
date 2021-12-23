@@ -17,6 +17,26 @@ export const makeServer = ({environment = "development"} = {}) => new Server({
         server.createList('location', 100)
         server.createList('employee', 50);
         server.createList('order', 50);
+        server.create('employee', {
+            dob: "17.09.2021",
+            documentDate: "29.10.2021",
+            documentIssuerCode: "40-994",
+            documentIssuerName: "Hoppe and Sons",
+            documentNumber: 456389,
+            documentSeries: 7429,
+            fio: "Eric Zieme",
+            position: "CLIENT_MANAGER",
+            searchStatus: "",
+            searchString: "Eric Zieme 456389"
+        });
+        server.create('location', {
+            addrLine: "Apt. 055",
+            searchStatus: "DELIVERY",
+            searchString: "Nicolas Trail Apt. 055",
+            street: "Nicolas Trail",
+            type: "DELIVERY",
+            zipCode: "57289"
+        });
     },
     factories: {
         employee,
@@ -36,7 +56,7 @@ export const makeServer = ({environment = "development"} = {}) => new Server({
             return schema[modelName].all().filter(item => {
                 let tr = true
                 if (searchString !== '') {
-                    tr = (item.searchString||'').toUpperCase().indexOf(searchString.toUpperCase()) > -1
+                    tr = (item.searchString || '').toUpperCase().indexOf(searchString.toUpperCase()) > -1
                 }
                 if (tr && selectors.length > 0) {
                     tr = selectors.indexOf(item.searchStatus) > -1
