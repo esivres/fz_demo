@@ -60,6 +60,7 @@ function PageSelector() {
                         {name:'Просроченные',key:'alert'},
                         {name:'Исполненно',key:'complete'}
                     ]}
+                    selectorName="type"
                     card={OrderCard}
                     countGrid={2}
                     />

@@ -3,7 +3,8 @@ import faker from "faker"
 import fakerRu from "faker/locale/ru"
 
 const ROLES = ['CLIENT_MANAGER', 'SERVICE_MANAGER', 'TOP_MANAGER', 'ADMINISTRATOR'];
-const LOCATION_TYPE = ['IDLE', 'SERVICE', 'DELIVERY']
+const LOCATION_TYPE = ['IDLE', 'SERVICE', 'DELIVERY'];
+const TYPE_ORDER = ['WORK', 'ALERT', 'COMPLETE'];
 
 const fio = () => faker.name.firstName() + " " + faker.name.lastName();
 const address = () => `${faker.address.city()}, ${faker.address.streetAddress()}`;
@@ -46,6 +47,15 @@ export const order = Factory.extend({
 
   deliveryDate: () => faker.date.future(),
   count: () => faker.datatype.number({ min: 1 , max: 10000 }),
+  type: () => TYPE_ORDER[faker.datatype.number(TYPE_ORDER.length - 1)],
+
+  afterCreate(order) {
+    order.update({
+      searchString: `${order.id} ${order.companyNameSender} ${order.companyNameRecipient} ${order.type.toLowerCase()}`,
+      selectors: order.type.toLowerCase(),
+      sorting: Number(order.id),
+    })
+  }
 });
 
 export const location = Factory.extend({
@@ -54,11 +64,11 @@ export const location = Factory.extend({
   zipCode: () => faker.address.zipCode(),
   street: () => faker.address.streetName(),
   addrLine: () => faker.address.secondaryAddress(),
-  type: () => LOCATION_TYPE[faker.datatype.number(LOCATION_TYPE.length)],
+  type: () => LOCATION_TYPE[faker.datatype.number(LOCATION_TYPE.length - 1)],
   afterCreate(location, server) {
     location.update({
-      searchStatus : location.type,
-      searchString: `${location.street} ${location.addrLine}`
+      searchString: `${location.street} ${location.addrLine}`,
+      selectors: location.type,
     })
   }
 })

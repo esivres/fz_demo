@@ -24,7 +24,7 @@ const OrderCard = ({
       <h2 class="uk-heading-bullet">Заказ #{id}</h2>
       <form>
         <div class="uk-flex uk-flex-between">
-          <fieldset class="uk-fieldset">
+          <fieldset class="uk-fieldset uk-width-1-2">
             <legend class="uk-legend">Отправитель</legend>
             <Input label="Наименование Компании" value={companyNameSender} disabled />
             <Input label="Адресс" value={comapnyAddressSender} disabled />
@@ -32,7 +32,7 @@ const OrderCard = ({
             <Input label="Номер телефона" value={phoneNumberSender} disabled />
             <Input label="Адрес электронной почты" value={emailSender} disabled />
           </fieldset>
-          <fieldset class="uk-fieldset">
+          <fieldset class="uk-fieldset uk-width-1-2 uk-margin-medium-left">
             <legend class="uk-legend">Получатель</legend>
             <Input label="Наименование Компании" value={companyNameRecipient} disabled />
             <Input label="Адресс" value={comapnyAddressRecipient} disabled />

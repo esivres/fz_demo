@@ -20,7 +20,7 @@ function Search(props) {
     } else {
       sSelectors.push(selector)
     }
-    setSearchParams({oldValue: sSelectors, order: sortFlag, s: searchQuery})
+    setSearchParams({[props.selectorName || 'oldValue']: sSelectors, order: sortFlag, s: searchQuery})
     setSSelectors(sSelectors)
   }
 
@@ -119,7 +119,7 @@ function Search(props) {
             </span>
           </div>
         </div>
-        <ul className={`uk-child-width-1-${(props.countGrid - 1) || 2} uk-child-width-1-${props.countGrid || 3}@m uk-text-center`} data-uk-grid>
+        <ul className={`uk-child-width-1-${( props.countGrid - 1) || 2 } uk-child-width-1-${ props.countGrid || 3 }@m uk-text-center`} data-uk-grid>
           {data}
         </ul>
       </div>
