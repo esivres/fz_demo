@@ -1,54 +1,34 @@
-import React, { useState } from 'react';
-import Modal from 'react-modal';
-import { useSelector } from 'react-redux'
+import React, {useEffect, useMemo, useState} from 'react';
+import {useNavigate} from "react-router-dom";
 
-import Form from './Form';
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
-
-const ORDER_STATUS = {
-  'WORK': 'Ожидают',
-  'ALERT': 'Просроченные',
-  'COMPLETE': 'Исполненно',
-};
 
 const OrderCard = (props) => {
-  const [modalIsOpen, setIsOpen] = useState(false);
-
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
-
-  const company = useSelector(({ company: { list }}) => list);
-
-  return (
-    <div className="uk-card uk-card-hover uk-card-body uk-text-left">
-      <Form {...props} company={company} isDisabled>
-        <button 
-          className="uk-button uk-button-default"
-          onClick={openModal}
-        >Редактировать</button>
-      </Form>
-
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
-        <Form {...props} company={company} onSubmit={(el) => console.log({ el }) || closeModal()} closeModal={closeModal} isEdit />
-      </Modal>
-
-    </div>
-  )
+    const navigate = useNavigate();
+    const [sender, setSender] = useState({companyName: '...'})
+    const [recipient, setRecipient] = useState({companyName: '...'})
+    useEffect(() => {
+        fetch('/api/companies/' + props.senderId).then((r) => r.json()).then(setSender)
+        fetch('/api/companies/' + props.recipientId).then((r) => r.json()).then(setRecipient)
+    }, [])
+    return (
+        <div onClick={() => navigate(`/orders/${props.id}`)}>
+            <div className="uk-card uk-card-hover uk-card-body uk-child-width-expand">
+                <h3 className="uk-card-title">Заказ №{props.id}</h3>
+                <div className="uk-grid-small" data-uk-grid>
+                    <div data-uk-leader="fill: -">От</div>
+                    <div>{sender.name}</div>
+                </div>
+                <div className="uk-grid-small" data-uk-grid>
+                    <div data-uk-leader="fill: -">Для</div>
+                    <div>{recipient.name}</div>
+                </div>
+                <div className="uk-grid-small" data-uk-grid>
+                    <div data-ul-leader="fill: -">Вес</div>
+                    <div>{props.count}</div>
+                </div>
+            </div>
+        </div>
+    )
 }
 
 export default OrderCard;

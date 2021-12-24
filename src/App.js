@@ -1,11 +1,21 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
+import {useKeycloak} from '@react-keycloak/web'
 import {Route, Routes} from "react-router-dom";
 import EmployeeSearchCard from "./search/EmployeeCard";
 import Search from './Search.js'
 import {LocationCard} from "./search/LocationCard";
 import OrderCard from "./order/OrderCard";
+import OrderForm from "./order/OrderForm";
 
 function Header() {
+
+    const {keycloak, initialized} = useKeycloak()
+    const [userInfo, setUserInfo] = useState({preferred_username: '...'})
+    useEffect(() => {
+        keycloak.loadUserInfo().then(ui => {
+            setUserInfo(ui);
+        })
+    }, [initialized]);
     return (
         <nav className="uk-navbar-container uk-margin uk-box-shadow-medium" data-uk-navbar>
             <div className="uk-navbar-center">
@@ -13,7 +23,7 @@ function Header() {
                     <div>
                         <ul className="uk-navbar-nav">
                             <li className="uk-active"><a href="/orders">Заказы</a></li>
-                            <li className="uk-active"><a href="/outfit">Наряды</a></li>
+                            <li className="uk-active"><a href="/outfits">Наряды</a></li>
                         </ul>
                     </div>
                 </div>
@@ -25,10 +35,10 @@ function Header() {
                                 <a href="/catalog">Справочники</a>
                                 <div className="uk-navbar-dropdown">
                                     <ul className="uk-nav uk-navbar-dropdown-nav">
-                                        <li><a href="/catalog/vehicle">Машины</a></li>
-                                        <li><a href="/catalog/employee">Сотрудники</a></li>
-                                        <li><a href="/catalog/customer">Клиенты</a></li>
-                                        <li><a href="/catalog/location">Локации</a></li>
+                                        <li><a href="/catalog/vehicles">Машины</a></li>
+                                        <li><a href="/catalog/employees">Сотрудники</a></li>
+                                        <li><a href="/catalog/companies">Клиенты</a></li>
+                                        <li><a href="/catalog/locations">Локации</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -38,61 +48,74 @@ function Header() {
             </div>
             <div className="uk-navbar-right">
                 <a className="uk-navbar-toggle" href="#">
-                    <span data-uk-icon="icon: user"></span> <span className="uk-margin-small-left">Василий Пупкин</span>
+                    <span data-uk-icon="icon: user"></span> <span
+                    className="uk-margin-small-left">{userInfo?.preferred_username}</span>
                 </a>
                 <div className="uk-navbar-dropdown">
                     <ul className="uk-nav uk-navbar-dropdown-nav">
-                        <li><a href="#">Выйти</a></li>
+                        <li><a onClick={() => keycloak.logout()}>Выйти</a></li>
                     </ul>
                 </div>
             </div>
 
         </nav>
-        )
+    )
 }
 
 function PageSelector() {
+    const {keycloak, initialized} = useKeycloak()
     return (
-            <Routes>
-                <Route path="/orders" element={
-                    <Search type='order' selectors={[
-                        {name:'Ожидают',key:'work'},
-                        {name:'Просроченные',key:'alert'},
-                        {name:'Исполненно',key:'complete'}
+        <Routes>
+            <Route path="/">
+                <Route  path="orders" element={
+                    <Search type='orders' selectors={[
+                        {name: 'Ожидают', key: 'work'},
+                        {name: 'Просроченные', key: 'alert'},
+                        {name: 'Исполненно', key: 'complete'}
                     ]}
-                    selectorName="type"
-                    card={OrderCard}
-                    countGrid={2}
+                            selectorName="type"
+                            card={OrderCard}
                     />
-                } />
-                <Route path="/outfit" element={
-                    <Search type='outfit'/>
-                } />
-                <Route path="/catalog/vehicle" element={
-                    <Search type='vehicle'/>
-                } />
-                <Route path="/catalog/employee" element={
-                    <Search type='employee' card={EmployeeSearchCard} />
-                } />
-                <Route path="/catalog/customer" element={
-                    <Search type='customer'/>
-                } />
-                <Route path="/catalog/location" element={<Search type='location' selectors={[
-                    {name: 'Ожидание', key: 'IDLE'},
-                    {name: 'Обслуживание',key: 'SERVICE'},
-                    {name: 'Доставка', key: 'DELIVERY'}]} card={LocationCard}/>}/>
-            </Routes>
-        )
+                }>
+                    <Route path=":orderId" element={<OrderForm/>}/>
+                </Route>
+                <Route path="outfits" element={
+                    <Search type='outfits'/>
+                }/>
+                <Route path="catalog">
+                    <Route path="vehicles" element={
+                        <Search type='vehicles'/>
+                    }/>
+                    <Route path="employees" element={
+                        <Search type='employees' card={EmployeeSearchCard}/>
+                    }/>
+                    <Route path="companies" element={
+                        <Search type='companies'/>
+                    }/>
+                    <Route path="locations" element={<Search type='locations' selectors={[
+                        {name: 'Ожидание', key: 'IDLE'},
+                        {name: 'Обслуживание', key: 'SERVICE'},
+                        {name: 'Доставка', key: 'DELIVERY'}]} card={LocationCard}/>}/>
+                </Route>
+            </Route>
+        </Routes>
+    )
 
 }
 
 function App() {
-    return (
-        <div>
+    const {keycloak, initialized} = useKeycloak()
+    return initialized && keycloak.authenticated
+        ? (<div>
             <Header/>
             <PageSelector/>
-        </div>
-    )
+        </div>) :
+        (<div onClick={() => window.location.assign(keycloak.createLoginUrl())}>
+            <div className="uk-card uk-card-primary uk-card-body">
+                <h3 className="uk-card-title">Требуется авторизация</h3>
+                <p>Для доступа к ресурсу требуется авторизация</p>
+            </div>
+        </div>)
 }
 
 export default App;

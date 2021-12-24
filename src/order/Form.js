@@ -13,9 +13,10 @@ const ORDER_STATUS = {
 
 const findCompany = id => company => company.id === id;
 
-const Form = ({ 
+const Form = ({
   id,
-
+    sender,
+    recipient,
   companyNameSender,
   comapnyAddressSender,
   fioSender,
@@ -28,7 +29,7 @@ const Form = ({
   phoneNumberRecipient,
   emailRecipient,
 
-  count, 
+  count,
   deliveryDate,
   type,
 
@@ -41,10 +42,6 @@ const Form = ({
   company,
   isEdit = false,
 }) => {
-  const [sender, recipient] = useMemo(() => [
-    company.find(findCompany(senderId)),
-    company.find(findCompany(recipientId)),
-  ], [company]);
 
   if(!company.length) {
     return null;
@@ -54,7 +51,7 @@ const Form = ({
   const statusOptions = Object.keys(ORDER_STATUS).map(el => ({ id: el, title: ORDER_STATUS[el]}));
 
   const date = format(new Date(deliveryDate), 'MM/dd/yyyy');
-  
+
   return (
     <ReactForm
       onSubmit={onSubmit}
@@ -69,7 +66,7 @@ const Form = ({
         emailRecipient,
         count: String(count),
         date,
-        type, 
+        type,
       }}
 
       render={({ handleSubmit, dirty }) => (
@@ -84,7 +81,7 @@ const Form = ({
                     <Select label="Компания" options={companyOptions} {...props.input} />
                   )}
                 </Field>
-                
+
               ) : (
                 <>
                   <Input label="Наименование Компании" value={sender.name} disabled={!isEdit} />
@@ -106,9 +103,9 @@ const Form = ({
                   <Input label="Адрес электронной почты" {...props.input} disabled={!isEdit} />
                 )}
               </Field>
-              
-              
-              
+
+
+
             </fieldset>
             <fieldset className="uk-fieldset uk-width-1-2 uk-margin-medium-left">
               <legend className="uk-legend">Получатель</legend>
@@ -118,14 +115,14 @@ const Form = ({
                     <Select label="Компания" options={companyOptions} {...props.input} />
                   )}
                 </Field>
-                
+
               ) : (
                 <>
                   <Input label="Наименование Компании" value={recipient.name} disabled={!isEdit} />
                   <Input label="Адресс" value={recipient.address} disabled={!isEdit} />
                 </>
               )}
-              
+
               <Field name="fioRecipient">
                 {(props) => (
                   <Input label="Фамилия, имя, отчество" disabled={!isEdit} {...props.input} />
@@ -159,7 +156,7 @@ const Form = ({
               {(props) => (
                 <Select label="Статус" options={statusOptions} disabled={!isEdit} {...props.input} />
               )}
-            </Field>            
+            </Field>
           </fieldset>
           {children}
           {isEdit && (
@@ -178,7 +175,7 @@ const Form = ({
         </form>
       )}
     />
-    
+
   )
 }
 
