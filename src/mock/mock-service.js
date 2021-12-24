@@ -60,7 +60,7 @@ export const makeServer = ({environment = "development"} = {}) => {
             this.namespace = "/";
             this.timing = 750;
             this.passthrough("https://51.250.22.141/***")
-
+            this.passthrough("keycloak.json")
             this.get("api/:type", (schema, request) => {
                 let modelName = request.params.type ;
                 let searchString = request.queryParams.s;

@@ -70,7 +70,7 @@ const Form = ({
       }}
 
       render={({ handleSubmit, dirty }) => (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="uk-background-muted uk-padding uk-panel">
           <h2 className="uk-heading-bullet">Заказ #{id}</h2>
           <div className="uk-flex uk-flex-between">
             <fieldset className="uk-fieldset uk-width-1-2">

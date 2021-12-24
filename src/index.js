@@ -36,9 +36,7 @@ ReactDOM.render(
             onTokens={tokenLogger}
         >
             <Provider store={store}>
-                <BrowserRouter>
                     <App/>
-                </BrowserRouter>
             </Provider>
         </ReactKeycloakProvider>
     </React.StrictMode>,

@@ -1,5 +1,5 @@
 {
-  "url": "http://51.250.22.141/auth",
-  "realm": "Master",
+  "url": "https://51.250.22.141/auth",
+  "realm": "master",
   "clientId": "local"
 }
